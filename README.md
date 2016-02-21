@@ -3,6 +3,7 @@
 PKYStepper is a customizable UIControl with stepper and label combined.
 
 <img src="screenshot.png" width="300px;" />
+<img src="screenshotB.png" width="300px;" />
 
 ## Requirements
 iOS6+
@@ -12,6 +13,7 @@ iOS6+
 - block based callback for when value changed, value incremented, and value decremented
 - toggle visibility of increment/decrement button when the value is at maximun/minimum
 - works well with storyboard
+- setting just a string will allow to have a full button for the initial case (count == 0)
 
 
 ## Installation
