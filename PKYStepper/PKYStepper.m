@@ -17,6 +17,7 @@
 #import "PKYStepper.h"
 
 static const float kButtonWidth = 44.0f;
+static const float kBorderWidth = 1.0f;
 
 @implementation PKYStepper
 
@@ -42,20 +43,21 @@ static const float kButtonWidth = 44.0f;
 - (void)commonInit
 {
     _value = 0.0f;
-    _stepInterval = 1.0f;
     _minimum = 0.0f;
     _maximum = 100.0f;
+    _stepInterval = kBorderWidth;
     _hidesDecrementWhenMinimum = NO;
     _hidesIncrementWhenMaximum = NO;
     _buttonWidth = kButtonWidth;
     
     self.clipsToBounds = YES;
-    [self setBorderWidth:1.0f];
+    [self setBorderColor:[UIColor colorWithRed:155.0/255 green:155.0/255 blue:155.0/255 alpha:1.0]];
+    [self setBorderWidth:kBorderWidth];
     [self setCornerRadius:3.0];
     
     self.countLabel = [[UILabel alloc] init];
     self.countLabel.textAlignment = NSTextAlignmentCenter;
-    self.countLabel.layer.borderWidth = 1.0f;
+    self.countLabel.layer.borderWidth = kBorderWidth;
     [self addSubview:self.countLabel];
     
     self.incrementButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -68,13 +70,10 @@ static const float kButtonWidth = 44.0f;
     [self.decrementButton addTarget:self action:@selector(decrementButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.decrementButton];
     
-    UIColor *defaultColor = [UIColor colorWithRed:(79/255.0) green:(161/255.0) blue:(210/255.0) alpha:1.0];
-    [self setBorderColor:defaultColor];
-    [self setLabelTextColor:defaultColor];
-    [self setButtonTextColor:defaultColor forState:UIControlStateNormal];
-    
-    [self setLabelFont:[UIFont fontWithName:@"Avernir-Roman" size:14.0f]];
-    [self setButtonFont:[UIFont fontWithName:@"Avenir-Black" size:24.0f]];
+    self.minimumStateButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.minimumStateButton setTitle:self.minimumStateString forState:UIControlStateNormal];
+    [self.minimumStateButton addTarget:self action:@selector(incrementButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.minimumStateButton];
 }
 
 
@@ -87,9 +86,11 @@ static const float kButtonWidth = 44.0f;
     self.countLabel.frame = CGRectMake(self.buttonWidth, 0, width - (self.buttonWidth * 2), height);
     self.incrementButton.frame = CGRectMake(width - self.buttonWidth, 0, self.buttonWidth, height);
     self.decrementButton.frame = CGRectMake(0, 0, self.buttonWidth, height);
+    self.minimumStateButton.frame = CGRectMake(0, 0, width, height);
     
     self.incrementButton.hidden = (self.hidesIncrementWhenMaximum && [self isMaximum]);
     self.decrementButton.hidden = (self.hidesDecrementWhenMinimum && [self isMinimum]);
+    self.minimumStateButton.hidden = ! [self isMinimum];
 }
 
 - (void)setup
@@ -117,6 +118,8 @@ static const float kButtonWidth = 44.0f;
 {
     self.layer.borderColor = color.CGColor;
     self.countLabel.layer.borderColor = color.CGColor;
+    self.incrementButton.layer.borderColor = color.CGColor;
+    self.decrementButton.layer.borderColor = color.CGColor;
 }
 
 - (void)setBorderWidth:(CGFloat)width
@@ -137,12 +140,15 @@ static const float kButtonWidth = 44.0f;
 - (void)setLabelFont:(UIFont *)font
 {
     self.countLabel.font = font;
+    self.minimumStateButton.titleLabel.font = font;
 }
 
 - (void)setButtonTextColor:(UIColor *)color forState:(UIControlState)state
 {
     [self.incrementButton setTitleColor:color forState:state];
     [self.decrementButton setTitleColor:color forState:state];
+    [self.minimumStateButton setBackgroundColor:color];
+    [self.minimumStateButton setTitleColor:[UIColor whiteColor] forState:state];
 }
 
 - (void)setButtonFont:(UIFont *)font
@@ -151,11 +157,18 @@ static const float kButtonWidth = 44.0f;
     self.decrementButton.titleLabel.font = font;
 }
 
+- (void)setMinimumStateString:(NSString *)minimumStateString {
+    _minimumStateString = minimumStateString;
+    [_minimumStateButton setTitle:minimumStateString forState:UIControlStateNormal];
+}
+
 
 #pragma mark setter
 - (void)setValue:(float)value
 {
     _value = value;
+    _countLabel.text = [NSString stringWithFormat:@"%@", @(value)];
+    
     if (self.hidesDecrementWhenMinimum)
     {
         self.decrementButton.hidden = [self isMinimum];
@@ -185,6 +198,7 @@ static const float kButtonWidth = 44.0f;
             self.incrementCallback(self, self.value);
         }
     }
+    self.minimumStateButton.hidden = YES;
 }
 
 - (void)decrementButtonTapped:(id)sender
@@ -196,6 +210,9 @@ static const float kButtonWidth = 44.0f;
         {
             self.decrementCallback(self, self.value);
         }
+    }
+    if ([self isMinimum]) {
+        self.minimumStateButton.hidden = NO;
     }
 }
 

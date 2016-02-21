@@ -28,15 +28,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    float width = 260.0f;
+    float width = 180.0f;
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
     float x = (screenWidth - width) / 2.0;
     
     // plain
     self.plainStepper = [[PKYStepper alloc] initWithFrame:CGRectMake(x, 100, width, 44)];
-    self.plainStepper.valueChangedCallback = ^(PKYStepper *stepper, float count) {
-        stepper.countLabel.text = [NSString stringWithFormat:@"Dogs: %@", @(count)];
-    };
+    self.plainStepper.minimumStateString = @"agregar";
+    [self.plainStepper setLabelTextColor:[UIColor colorWithRed:255.0/255.0 green:98.0/255.0 blue:67.0/255.0 alpha:1.0]];
+    [self.plainStepper setLabelFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:15.0f]];
+    [self.plainStepper setButtonTextColor:[UIColor colorWithRed:255.0/255 green:98.0/255 blue:67.0/255 alpha:1.0] forState:UIControlStateNormal];
+    [self.plainStepper setButtonFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:24.0f]];
     [self.plainStepper setup];
     [self.view addSubview:self.plainStepper];
     

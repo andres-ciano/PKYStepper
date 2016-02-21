@@ -22,9 +22,11 @@ typedef void (^PKYStepperDecrementedCallback)(PKYStepper *stepper, float newValu
 IB_DESIGNABLE
 @interface PKYStepper : UIControl
 @property(nonatomic, strong) UILabel *countLabel;
-@property(nonatomic, strong) UIColor *labelColor;
 @property(nonatomic, strong) UIButton *incrementButton;
 @property(nonatomic, strong) UIButton *decrementButton;
+
+@property(nonatomic, strong) UIButton *minimumStateButton;
+@property(nonatomic) NSString *minimumStateString;
 
 @property(nonatomic) float value; // default: 0.0
 @property(nonatomic) float stepInterval; // default: 1.0
