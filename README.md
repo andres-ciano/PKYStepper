@@ -3,7 +3,7 @@
 PKYStepper is a customizable UIControl with stepper and label combined.
 
 <img src="screenshot.png" width="300px;" />
-<img src="screenshotB.png" width="300px;" />
+<img src="screenshot2.png" width="300px;" />
 
 ## Requirements
 iOS6+
