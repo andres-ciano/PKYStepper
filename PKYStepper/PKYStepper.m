@@ -51,7 +51,6 @@ static const float kBorderWidth = 1.0f;
     _buttonWidth = kButtonWidth;
     
     self.clipsToBounds = YES;
-    [self setBorderColor:[UIColor colorWithRed:155.0/255 green:155.0/255 blue:155.0/255 alpha:1.0]];
     [self setBorderWidth:kBorderWidth];
     [self setCornerRadius:3.0];
     
@@ -74,6 +73,14 @@ static const float kBorderWidth = 1.0f;
     [self.minimumStateButton setTitle:self.minimumStateString forState:UIControlStateNormal];
     [self.minimumStateButton addTarget:self action:@selector(incrementButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.minimumStateButton];
+    
+    UIColor *defaultColor = [UIColor colorWithRed:(155/255.0) green:(155/255.0) blue:(155/255.0) alpha:1.0];
+    [self setBorderColor:defaultColor];
+    [self setLabelTextColor:defaultColor];
+    [self setButtonTextColor:defaultColor forState:UIControlStateNormal];
+    
+    [self setLabelFont:[UIFont fontWithName:@"Avernir-Roman" size:14.0f]];
+    [self setButtonFont:[UIFont fontWithName:@"Avenir-Black" size:24.0f]];
 }
 
 
@@ -90,7 +97,7 @@ static const float kBorderWidth = 1.0f;
     
     self.incrementButton.hidden = (self.hidesIncrementWhenMaximum && [self isMaximum]);
     self.decrementButton.hidden = (self.hidesDecrementWhenMinimum && [self isMinimum]);
-    self.minimumStateButton.hidden = ! [self isMinimum];
+    self.minimumStateButton.hidden = (self.minimumStateString == nil || ! [self isMinimum]);
 }
 
 - (void)setup
@@ -118,8 +125,6 @@ static const float kBorderWidth = 1.0f;
 {
     self.layer.borderColor = color.CGColor;
     self.countLabel.layer.borderColor = color.CGColor;
-    self.incrementButton.layer.borderColor = color.CGColor;
-    self.decrementButton.layer.borderColor = color.CGColor;
 }
 
 - (void)setBorderWidth:(CGFloat)width
@@ -211,7 +216,7 @@ static const float kBorderWidth = 1.0f;
             self.decrementCallback(self, self.value);
         }
     }
-    if ([self isMinimum]) {
+    if (self.minimumStateString && [self isMinimum]) {
         self.minimumStateButton.hidden = NO;
     }
 }
