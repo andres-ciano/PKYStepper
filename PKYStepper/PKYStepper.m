@@ -22,6 +22,7 @@ static const float kBorderWidth = 1.0f;
 @implementation PKYStepper
 
 #pragma mark initialization
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame])
@@ -85,6 +86,7 @@ static const float kBorderWidth = 1.0f;
 
 
 #pragma mark render
+
 - (void)layoutSubviews
 {
     CGFloat width = self.bounds.size.width;
@@ -121,6 +123,7 @@ static const float kBorderWidth = 1.0f;
 
 
 #pragma mark view customization
+
 - (void)setBorderColor:(UIColor *)color
 {
     self.layer.borderColor = color.CGColor;
@@ -162,13 +165,9 @@ static const float kBorderWidth = 1.0f;
     self.decrementButton.titleLabel.font = font;
 }
 
-- (void)setMinimumStateString:(NSString *)minimumStateString {
-    _minimumStateString = minimumStateString;
-    [_minimumStateButton setTitle:minimumStateString forState:UIControlStateNormal];
-}
-
 
 #pragma mark setter
+
 - (void)setValue:(float)value
 {
     _value = value;
@@ -190,9 +189,15 @@ static const float kBorderWidth = 1.0f;
     }
 }
 
+- (void)setMinimumStateString:(NSString *)minimumStateString
+{
+    _minimumStateString = minimumStateString;
+    [_minimumStateButton setTitle:minimumStateString forState:UIControlStateNormal];
+}
 
 
 #pragma mark event handler
+
 - (void)incrementButtonTapped:(id)sender
 {
     if (self.value < self.maximum)
@@ -216,13 +221,15 @@ static const float kBorderWidth = 1.0f;
             self.decrementCallback(self, self.value);
         }
     }
-    if (self.minimumStateString && [self isMinimum]) {
+    if (self.minimumStateString && [self isMinimum])
+    {
         self.minimumStateButton.hidden = NO;
     }
 }
 
 
 #pragma mark private helpers
+
 - (BOOL)isMinimum
 {
     return self.value == self.minimum;
