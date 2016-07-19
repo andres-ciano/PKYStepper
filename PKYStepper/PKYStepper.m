@@ -133,6 +133,7 @@ static const float kBorderWidth = 1.0f;
 - (void)setBorderWidth:(CGFloat)width
 {
     self.layer.borderWidth = width;
+    self.countLabel.layer.borderWidth = width;
 }
 
 - (void)setCornerRadius:(CGFloat)radius
